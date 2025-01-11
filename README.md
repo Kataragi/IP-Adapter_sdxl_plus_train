@@ -4,7 +4,7 @@
 
 ・resampler.pyは実際には「ip_adapter」フォルダーの中に格納されています。
 
-・ip_adapter_plus_structure.txtにはip-adapter-plus_sdxl_vit-h.binの191個のkeyが一覧で乗っています。
+・key_ip_adapter_plus.bin.txtとkey_ip_adapter_plus_test.bin.txtには191個のkeyが一覧で載っています。
 
 ・conv_p.pyは学習したplusモデルを変換するコードです
 
