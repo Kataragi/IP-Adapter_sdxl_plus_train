@@ -1,0 +1,38 @@
+got prompt
+!!! Exception during processing !!! The size of tensor a (577) must match the size of tensor b (257) at non-singleton dimension 1
+Traceback (most recent call last):
+  File "C:\ComfyUI\execution.py", line 328, in execute
+    output_data, output_ui, has_subgraph = get_output_data(obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb)
+  File "C:\ComfyUI\execution.py", line 203, in get_output_data
+    return_values = _map_node_over_list(obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb)
+  File "C:\ComfyUI\execution.py", line 174, in _map_node_over_list
+    process_inputs(input_dict, i)
+  File "C:\ComfyUI\execution.py", line 163, in process_inputs
+    results.append(getattr(obj, func)(**inputs))
+  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\IPAdapterPlus.py", line 822, in apply_ipadapter
+    work_model, face_image = ipadapter_execute(work_model, ipadapter_model, clip_vision, **ipa_args)
+  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\IPAdapterPlus.py", line 359, in ipadapter_execute
+    img_cond_embeds = encode_image_masked(clipvision, image, batch_size=encode_batch_size, tiles=enhance_tiles, ratio=enhance_ratio, clipvision_size=clipvision_size)
+  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\utils.py", line 242, in encode_image_masked
+    embeds = encode_image_masked_(clip_vision, image, mask, batch_size, clipvision_size=clipvision_size)
+  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\utils.py", line 299, in encode_image_masked_
+    out = clip_vision.model(pixel_values=pixel_values, intermediate_output=-2)
+  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\ComfyUI\comfy\clip_model.py", line 216, in forward
+    x = self.vision_model(*args, **kwargs)
+  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\ComfyUI\comfy\clip_model.py", line 195, in forward
+    x = self.embeddings(pixel_values)
+  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\ComfyUI\comfy\clip_model.py", line 171, in forward
+    return embeds + comfy.ops.cast_to_input(self.position_embedding.weight, embeds)
+RuntimeError: The size of tensor a (577) must match the size of tensor b (257) at non-singleton dimension 1
