@@ -84,12 +84,13 @@ class MyDataset(torch.utils.data.Dataset):
 
         self.transform = transforms.Compose([
             transforms.Resize(self.size, interpolation=transforms.InterpolationMode.BILINEAR),
+            transforms.CenterCrop(self.size),
             transforms.ToTensor(),
             transforms.Normalize([0.5], [0.5]),
         ])
 
         self.clip_image_processor = CLIPImageProcessor()
-        
+
     def __getitem__(self, idx):
         item = self.data[idx] 
         text = item["text"]
@@ -120,7 +121,7 @@ class MyDataset(torch.utils.data.Dataset):
         crop_coords_top_left = torch.tensor([top, left]) 
 
         clip_image = self.clip_image_processor(images=raw_image, return_tensors="pt").pixel_values
-        
+
         # drop
         drop_image_embed = 0
         rand_num = random.random()
@@ -195,17 +196,6 @@ class IPAdapter(torch.nn.Module):
         self.image_proj_model = image_proj_model
         self.adapter_modules = adapter_modules
 
-        # チェックポイントパスが指定されている場合、モデルの重みをロードする
-        if ckpt_path is not None:
-            if ckpt_path.endswith(".safetensors"):
-                # safetensors ファイルのロード
-                print(f"{ckpt_path}からモデルをGPUにロードしました")
-                self.load_from_checkpoint(ckpt_path)
-            else:
-                # それ以外の形式（例: .ckpt, .pth）は torch.load() を使用
-                print(f"Loading model weights from {ckpt_path} using torch.")
-                self.load_from_checkpoint(ckpt_path)
-
     def forward(self, noisy_latents, timesteps, encoder_hidden_states, unet_added_cond_kwargs, image_embeds):
         ip_tokens = self.image_proj_model(image_embeds)
         encoder_hidden_states = torch.cat([encoder_hidden_states, ip_tokens], dim=1)
@@ -218,120 +208,42 @@ class IPAdapter(torch.nn.Module):
         orig_ip_proj_sum = torch.sum(torch.stack([torch.sum(p) for p in self.image_proj_model.parameters()]))
         orig_adapter_sum = torch.sum(torch.stack([torch.sum(p) for p in self.adapter_modules.parameters()]))
 
-        # チェックポイントのロード
+        # チェックポイントから状態辞書をロードする（CPUにマップ）
+        # state_dict = torch.load(ckpt_path, map_location="cpu")
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        state_dict = safe_load_file(ckpt_path, device=device)
-
-        # 不要なキーをリストアップ
-        keys_to_remove = [
-            "image_proj.proj.bias",
-            "image_proj.norm.weight",
-            "image_proj.proj.weight",
-            "image_proj.norm.bias",
-        ]
-
-        # state_dict から不要なキーを削除
-        for key in keys_to_remove:
-            if key in state_dict:
-                # print(f"Removing unused parameter: {key}")
-                del state_dict[key]
-
-        # --------------------------------------------------------------------
-        # 不一致パラメータを “部分的にコピー＆パディング” で対応する関数
-        def resize_tensor(param: torch.Tensor, expected_shape: torch.Size) -> torch.Tensor:
-            # 2D（線形レイヤ weight 等）なら [out_features, in_features]
-            if len(param.shape) == 2:
-                old_out, old_in = param.shape
-                new_out, new_in = expected_shape
-
-                # 新しいテンソルを 0 で作成（dtype を param に揃える -> fp16）
-                resized_param = param.new_zeros(new_out, new_in).to(param.dtype)
-
-                # コピーする範囲を決定 (小さい方に合わせる)
-                out_to_copy = min(old_out, new_out)
-                in_to_copy = min(old_in, new_in)
-
-                # 必要分だけコピー
-                resized_param[:out_to_copy, :in_to_copy] = param[:out_to_copy, :in_to_copy]
-
-                return resized_param
-
-            # 1D（bias 等）なら [out_features]
-            elif len(param.shape) == 1:
-                old_len = param.shape[0]
-                new_len = expected_shape[0]
-
-                if new_len == old_len:
-                    return param
-                elif new_len < old_len:
-                    # 超過分を切り捨て
-                    return param[:new_len]
-                else:
-                    # 足りない分を 0 でパディング
-                    extra = new_len - old_len
-                    pad_zeros = param.new_zeros(extra).to(param.dtype)
-                    return torch.cat([param, pad_zeros], dim=0)
-
+        if ckpt_path is not None:
+            if ckpt_path.endswith(".safetensors"):
+                state_dict = safe_load_file(ckpt_path, device=device)
             else:
-                # 今回の例では 2D, 1D 以外は想定外
-                raise ValueError(f"Unsupported tensor shape: {param.shape}")
+                state_dict = torch.load(ckpt_path, map_location=device)
 
-        # --------------------------------------------------------------------
-        # 1. "image_proj_model" 用の state_dict を整形
-        state_dict_image_proj = {
-            key.replace("image_proj.", ""): value
-            for key, value in state_dict.items()
-            if key.startswith("image_proj.")
-        }
+        # latents の形状不一致チェックを復活
+        if "latents" in state_dict["image_proj"] and "latents" in self.image_proj_model.state_dict():
+            if state_dict["image_proj"]["latents"].shape != self.image_proj_model.state_dict()["latents"].shape:
+                print(f"Shapes of 'image_proj.latents' in checkpoint {ckpt_path} and current model do not match.")
+                print("Removing 'latents' from checkpoint and loading the rest of the weights.")
+                del state_dict["image_proj"]["latents"]
+                strict_load_image_proj_model = False
 
-        # debug_image_proj_model_dtype(self.image_proj_model, "Before load_with_resize")
-        # 2. リサイズ付きロード処理
-        def load_with_resize(model, ckpt_dict):
-            model_dict = model.state_dict()
-            new_state_dict = {}
+        print(f"{ckpt_path}からモデルをGPUにロードしました")
+        # state_dict から image_proj に対応するパラメータを抽出
+        state_dict_image_proj = {key.replace("image_proj.", ""): value for key, value in state_dict.items() if key.startswith("image_proj.")}
 
-            for k, v in ckpt_dict.items():
-                if k in model_dict:
-                    expected_param = model_dict[k]
-                    expected_shape = expected_param.shape
+        # image_proj_model に対応するキーをロード
+        self.image_proj_model.load_state_dict(state_dict_image_proj, strict=True)
 
-                    # まず dtype をモデル側 (fp16) に合わせる
-                    v = v.to(expected_param.dtype)
+        # state_dict から ip_adapter に対応するパラメータを抽出
+        state_dict_ip_adapter = {key.replace("ip_adapter.", ""): value for key, value in state_dict.items() if key.startswith("ip_adapter.")}
+        # adapter_modules に対応するキーをロード
+        self.adapter_modules.load_state_dict(state_dict_ip_adapter, strict=True)
 
-                    # 形状が一致していればそのまま使用
-                    if v.shape == expected_shape:
-                        new_state_dict[k] = v
-                    else:
-                        try:
-                            # print(f"Resizing {k}: {tuple(v.shape)} -> {tuple(expected_shape)}")
-                            resized_param = resize_tensor(v, expected_shape)
-                            new_state_dict[k] = resized_param
-                        except Exception as e:
-                            print(f"Skipping {k}: resize failed with error {e}")
-                else:
-                    # モデルに存在しないパラメータはスキップ
-                    print(f"Skipping {k}: not found in model state_dict")
+        # Calculate new checksums
+        new_ip_proj_sum = torch.sum(torch.stack([torch.sum(p) for p in self.image_proj_model.parameters()]))
+        new_adapter_sum = torch.sum(torch.stack([torch.sum(p) for p in self.adapter_modules.parameters()]))
 
-            # strict=False でロード
-            model.load_state_dict(new_state_dict, strict=False)
-
-            # すべてのパラメータを fp16 に変換
-            model.half()
-
-        # image_proj_model に対して読み込み
-        load_with_resize(self.image_proj_model, state_dict_image_proj)
-        # debug_image_proj_model_dtype(self.image_proj_model, "Before load_with_resize")
-
-        # --------------------------------------------------------------------
-        # 3. "adapter_modules" 用の state_dict を整形
-        state_dict_adapter = {
-            key.replace("ip_adapter.", ""): value
-            for key, value in state_dict.items()
-            if key.startswith("ip_adapter.")
-        }
-
-        # adapter_modules に対して読み込み
-        load_with_resize(self.adapter_modules, state_dict_adapter)
+        # Verify if the weights have changed
+        assert orig_ip_proj_sum != new_ip_proj_sum, "Weights of image_proj_model did not change!"
+        assert orig_adapter_sum != new_adapter_sum, "Weights of adapter_modules did not change!"
 
         print(f"Successfully loaded weights from checkpoint {ckpt_path}")
 
@@ -497,11 +409,11 @@ def main():
         dim_head=64,
         heads=12,
         num_queries=args.num_tokens,
-        embedding_dim=image_encoder.config.hidden_size,
+        embedding_dim=image_encoder.config.hidden_size, 
         output_dim=unet.config.cross_attention_dim,
-        ff_mult=4
+        ff_mult=4,
     )
-    image_proj_model = image_proj_model.half()
+    print(image_proj_model)
 
     # init adapter modules
     attn_procs = {}
@@ -626,7 +538,7 @@ def main():
                         for image_embed, drop_image_embed in zip(image_embeds, batch["drop_image_embeds"])
                     ]
                     image_embeds = torch.stack(image_embeds_).half()
-                    
+                    # image_proj_model に渡す
                     with torch.autocast("cuda", dtype=torch.float16):
                         image_tokens = image_proj_model(image_embeds)
 
