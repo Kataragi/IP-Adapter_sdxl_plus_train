@@ -1,38 +1,531 @@
-got prompt
-!!! Exception during processing !!! The size of tensor a (577) must match the size of tensor b (257) at non-singleton dimension 1
 Traceback (most recent call last):
-  File "C:\ComfyUI\execution.py", line 328, in execute
-    output_data, output_ui, has_subgraph = get_output_data(obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb)
-  File "C:\ComfyUI\execution.py", line 203, in get_output_data
-    return_values = _map_node_over_list(obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb)
-  File "C:\ComfyUI\execution.py", line 174, in _map_node_over_list
-    process_inputs(input_dict, i)
-  File "C:\ComfyUI\execution.py", line 163, in process_inputs
-    results.append(getattr(obj, func)(**inputs))
-  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\IPAdapterPlus.py", line 822, in apply_ipadapter
-    work_model, face_image = ipadapter_execute(work_model, ipadapter_model, clip_vision, **ipa_args)
-  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\IPAdapterPlus.py", line 359, in ipadapter_execute
-    img_cond_embeds = encode_image_masked(clipvision, image, batch_size=encode_batch_size, tiles=enhance_tiles, ratio=enhance_ratio, clipvision_size=clipvision_size)
-  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\utils.py", line 242, in encode_image_masked
-    embeds = encode_image_masked_(clip_vision, image, mask, batch_size, clipvision_size=clipvision_size)
-  File "C:\ComfyUI\custom_nodes\ComfyUI_IPAdapter_plus\utils.py", line 299, in encode_image_masked_
-    out = clip_vision.model(pixel_values=pixel_values, intermediate_output=-2)
-  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "C:\ComfyUI\comfy\clip_model.py", line 216, in forward
-    x = self.vision_model(*args, **kwargs)
-  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "C:\ComfyUI\comfy\clip_model.py", line 195, in forward
-    x = self.embeddings(pixel_values)
-  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "C:\ComfyUI\venv\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "C:\ComfyUI\comfy\clip_model.py", line 171, in forward
-    return embeds + comfy.ops.cast_to_input(self.position_embedding.weight, embeds)
-RuntimeError: The size of tensor a (577) must match the size of tensor b (257) at non-singleton dimension 1
+  File "C:\GenAI\IP-Adapter\IP-Adapter\ip_adapter-plus_sdxl_demo.py", line 36, in <module>
+    ip_model = IPAdapterPlusXL(pipe, image_encoder_path, ip_ckpt, device, num_tokens=16)
+  File "C:\GenAI\IP-Adapter\IP-Adapter\ip_adapter\ip_adapter.py", line 78, in __init__
+    self.image_encoder = CLIPVisionModelWithProjection.from_pretrained(self.image_encoder_path).to(
+  File "C:\Users\yachi\AppData\Local\Programs\Python\Python310\lib\site-packages\transformers\modeling_utils.py", line 4224, in from_pretrained
+    ) = cls._load_pretrained_model(
+  File "C:\Users\yachi\AppData\Local\Programs\Python\Python310\lib\site-packages\transformers\modeling_utils.py", line 4852, in _load_pretrained_model
+    raise RuntimeError(f"Error(s) in loading state_dict for {model.__class__.__name__}:\n\t{error_msg}")
+RuntimeError: Error(s) in loading state_dict for CLIPVisionModelWithProjection:
+        size mismatch for vision_model.embeddings.class_embedding: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.embeddings.patch_embedding.weight: copying a param with shape torch.Size([1280, 3, 14, 14]) from checkpoint, the shape in current model is torch.Size([1664, 3, 14, 14]).
+        size mismatch for vision_model.embeddings.position_embedding.weight: copying a param with shape torch.Size([257, 1280]) from checkpoint, the shape in current model is torch.Size([257, 1664]).
+        size mismatch for vision_model.pre_layrnorm.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.pre_layrnorm.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.0.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.0.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.0.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.0.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.0.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.1.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.1.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.1.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.1.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.1.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.2.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.2.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.2.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.2.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.2.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.3.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.3.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.3.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.3.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.3.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.4.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.4.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.4.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.4.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.4.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.5.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.5.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.5.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.5.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.5.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.6.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.6.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.6.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.6.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.6.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.7.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.7.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.7.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.7.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.7.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.8.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.8.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.8.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.8.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.8.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.9.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.9.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.9.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.9.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.9.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.10.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.10.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.10.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.10.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.10.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.11.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.11.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.11.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.11.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.11.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.12.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.12.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.12.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.12.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.12.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.13.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.13.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.13.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.13.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.13.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.14.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.14.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.14.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.14.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.14.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.15.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.15.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.15.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.15.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.15.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.16.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.16.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.16.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.16.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.16.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.17.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.17.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.17.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.17.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.17.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.18.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.18.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.18.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.18.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.18.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.19.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.19.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.19.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.19.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.19.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.20.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.20.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.20.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.20.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.20.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.21.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.21.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.21.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.21.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.21.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.22.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.22.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.22.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.22.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.22.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.23.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.23.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.23.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.23.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.23.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.24.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.24.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.24.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.24.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.24.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.25.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.25.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.25.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.25.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.25.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.26.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.26.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.26.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.26.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.26.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.27.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.27.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.27.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.27.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.27.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.28.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.28.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.28.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.28.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.28.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.29.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.29.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.29.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.29.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.29.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.30.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.30.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.30.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.30.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.30.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.k_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.k_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.v_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.v_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.q_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.q_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.out_proj.weight: copying a param with shape torch.Size([1280, 1280]) from checkpoint, the shape in current model is torch.Size([1664, 1664]).
+        size mismatch for vision_model.encoder.layers.31.self_attn.out_proj.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.layer_norm1.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.layer_norm1.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.mlp.fc1.weight: copying a param with shape torch.Size([5120, 1280]) from checkpoint, the shape in current model is torch.Size([8192, 1664]).
+        size mismatch for vision_model.encoder.layers.31.mlp.fc1.bias: copying a param with shape torch.Size([5120]) from checkpoint, the shape in current model is torch.Size([8192]).
+        size mismatch for vision_model.encoder.layers.31.mlp.fc2.weight: copying a param with shape torch.Size([1280, 5120]) from checkpoint, the shape in current model is torch.Size([1664, 8192]).
+        size mismatch for vision_model.encoder.layers.31.mlp.fc2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.layer_norm2.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.encoder.layers.31.layer_norm2.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.post_layernorm.weight: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for vision_model.post_layernorm.bias: copying a param with shape torch.Size([1280]) from checkpoint, the shape in current model is torch.Size([1664]).
+        size mismatch for visual_projection.weight: copying a param with shape torch.Size([1024, 1280]) from checkpoint, the shape in current model is torch.Size([1280, 1664]).
+        You may consider adding `ignore_mismatched_sizes=True` in the model `from_pretrained` method.
