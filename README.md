@@ -9,4 +9,4 @@
 
 ・conv_p.pyは学習したplusモデルを変換するコードです
 
-・erorr.txtにはconv_p.pyで変換したモデルをComfyUIで使用した際に発生するエラーについて記載されています。
+・erorr.txtにはconv_p.pyで変換したモデルをip_adapter-plus_sdxl_demo.pyで使用した際に発生するエラーについて記載されています。
